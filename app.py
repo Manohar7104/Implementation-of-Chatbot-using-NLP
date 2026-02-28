@@ -36,7 +36,15 @@ vectorizer, clf = load_model()
 
 # ---------- CHATBOT ----------
 def chatbot(input_text):
+
     input_vector = vectorizer.transform([input_text])
+
+    probs = clf.predict_proba(input_vector)
+    confidence = max(probs[0])
+
+    if confidence < 0.4:
+        return "I'm not sure I understood. Can you rephrase?"
+
     tag = clf.predict(input_vector)[0]
 
     for intent in intents:
